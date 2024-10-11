@@ -51,4 +51,4 @@ SUPPORTED_LANGUAGES = [
     {"code": "vi", "name": "Vietnamese", "nativeName": "Tiếng Việt"},
 ]
 
-LANGUAGES_MAP = {lang["code"]: lang["name"] for lang in SUPPORTED_LANGUAGES}
+LANGUAGES_CODES = {lang["code"] for lang in SUPPORTED_LANGUAGES}

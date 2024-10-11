@@ -1,6 +1,5 @@
 from datetime import datetime
-
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, Integer, BigInteger, String, DateTime, Text, UniqueConstraint
 
 from src.db.engine import Base, DbEngine
 
@@ -18,11 +17,27 @@ class News(Base):
     tagged_title = Column(String(300), nullable=False, default='')
     content_html = Column(Text, nullable=False, default='')
     tagged_content_html = Column(Text, nullable=False, default='')
-    vocabulary_count = Column(Integer, nullable=False, default=0)
     word_count = Column(Integer, nullable=False, default=0)
-    sentences = Column(Text, nullable=False, default='')
+    vocabulary_count = Column(Integer, nullable=False, default=0)
     vocabulary = Column(Text, nullable=False, default='')
     date = Column(DateTime, nullable=False, index=True)
+
+
+class Sentence(Base):
+    __tablename__ = 'sentences'
+
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime, nullable=False, index=True, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+
+    sentence_hash = Column(BigInteger, nullable=False)
+    sentence = Column(String(500), nullable=False)
+    lang = Column(String(10), nullable=False)
+    translation = Column(Text, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint('sentence_hash', 'lang', 'sentence'),
+    )
 
 
 if __name__ == '__main__':

@@ -36,7 +36,6 @@ caprice
 cases
 certainly
 chaise
-chapter
 character
 children
 chooses

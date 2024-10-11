@@ -61,7 +61,6 @@ candour
 cautious
 censuring
 certainly
-chapter
 character
 characteristic
 charming
@@ -191,7 +190,6 @@ inviting
 is
 it
 its
-iv
 jane
 judgment
 just

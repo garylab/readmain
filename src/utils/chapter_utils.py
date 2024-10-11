@@ -15,8 +15,15 @@ def _get_words(text: str):
     return nlp(text)
 
 
-def tagged_html(input_html: str) -> (str, List[str], Set[str], int):
+def tagged_html(input_html: str) -> (str, str, List[str], Set[str], int):
     soup = BeautifulSoup(input_html, 'html.parser')
+
+    first_h1 = soup.find('h1')
+    if not first_h1:
+        raise ValueError('No <h1> tag found in the HTML')
+
+    title = first_h1.get_text().strip()
+    first_h1.decompose()
 
     all_sentences = []
     sentence_no = 0
@@ -31,7 +38,8 @@ def tagged_html(input_html: str) -> (str, List[str], Set[str], int):
         all_word_count += sentence_word_count
         all_sentences.extend(sentences)
 
-    return str(soup), all_sentences, all_vocabulary, all_word_count
+    content = str(soup)
+    return title, content, all_sentences, all_vocabulary, all_word_count
 
 
 def _process_tag(tag, sentence_no, all_vocabulary) -> (int, List[str], int):
@@ -50,7 +58,7 @@ def _process_tag(tag, sentence_no, all_vocabulary) -> (int, List[str], int):
         wrapped, vocabulary, word_count = wrap_words(s)
         all_vocabulary.update(vocabulary)
         sentence_word_count += word_count
-        tagged_sentences.append(f'<b><s id="{sentence_no}">{sentence_no}</s>{wrapped}</b> ')
+        tagged_sentences.append(f'<span><s>{sentence_no}</s><b>{wrapped}</b></span> ')
 
     tag.clear()
     tag.append(BeautifulSoup(' '.join(tagged_sentences), 'html.parser'))

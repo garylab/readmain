@@ -1696,8 +1696,6 @@ if
 ignominious
 ignorance
 ignorant
-ii
-iii
 ill
 imagination
 imagine
@@ -1812,8 +1810,6 @@ issued
 it
 its
 itself
-iv
-ix
 january
 jaws
 jealousy
@@ -3679,7 +3675,6 @@ utter
 uttere
 uttered
 uttering
-v
 vague
 vaguely
 vain
@@ -3694,15 +3689,12 @@ vengeance
 venture
 very
 veterinary
-vi
 vices
 viciously
 victoria
 victorious
 victory
 view
-vii
-viii
 vile
 violated
 violent
@@ -3886,7 +3878,6 @@ writing
 written
 wrong
 wurzels
-x
 yard
 yards
 year

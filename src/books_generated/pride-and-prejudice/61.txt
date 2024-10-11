@@ -67,7 +67,6 @@ carefully
 catherine
 change
 changed
-chapter
 character
 characters
 cheap
@@ -259,7 +258,6 @@ longer
 love
 loved
 lucky
-lxi
 lydia
 make
 management

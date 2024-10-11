@@ -44,7 +44,6 @@ careful
 carriage
 catherine
 caught
-chapter
 circle
 civility
 cold
@@ -309,4 +308,3 @@ work
 would
 wrong
 wrote
-xii

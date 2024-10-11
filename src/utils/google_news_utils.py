@@ -79,7 +79,9 @@ def clean_attr(tags: list):
                 else:
                     sub_tag.attrs = {}
         elif tag.name == 'img' and tag.get('src').startswith('http'):
-            tag.attrs = {'src':  tag.get('src')}
+            src = tag.get('src')
+            tag.attrs = {}
+            tag.attrs = {'src':  src}
 
 
 def remove_comment(tag: BeautifulSoup):

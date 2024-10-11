@@ -96,7 +96,6 @@ caught
 certain
 certainly
 chance
-chapter
 character
 characteristic
 charlotte
@@ -676,7 +675,6 @@ value
 vanity
 very
 vexation
-vi
 vingt
 visit
 vogue

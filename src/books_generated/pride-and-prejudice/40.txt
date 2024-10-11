@@ -68,7 +68,6 @@ care
 certain
 certainly
 chance
-chapter
 character
 charlotte
 check
@@ -537,7 +536,6 @@ witty
 world
 would
 wrong
-xl
 yes
 yet
 you

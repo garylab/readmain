@@ -4,12 +4,13 @@ from flask import Flask, render_template, jsonify, request, Response, stream_wit
 
 from src.config import DICT_API_KEY, DICT_ENDPOINT, AUDIO_ENDPOINT, STATIC_VERSION, CACHE_DIR, BOOKS_GENERATED_DIR, \
     LOG_DIR, HOME_NEWS_NUM
-from src.languages import SUPPORTED_LANGUAGES
+from src.db.sentence_dao import SentenceDao
+from src.languages import SUPPORTED_LANGUAGES, LANGUAGES_CODES
 from src.utils.book_utils import get_book_slug_map, get_prev_next_chapter_urls, get_book_objects, get_chapters, Chapter
 from src.utils.date_utils import time_ago
 from src.utils.logging_utils import init_logging
 from src.utils.number_utils import short_number
-from src.utils.openai_translator_utils import ChatGptTranslator
+from src.utils.openai_translator_utils import translate
 from src.db.news_dao import NewsDao
 
 app = Flask(__name__)
@@ -97,39 +98,24 @@ def get_dictionary():
 
 @app.post('/translate')
 def get_translation():
-    book_slug = request.json.get('book_slug')
-    chapter_no = request.json.get('chapter_no')
-    sentence_no = request.json.get('sentence_no')
+    text = request.json.get('text')
     to_lang = request.json.get('to_lang')
 
-    if book_slug is None:
-        return jsonify({'error': 'Book slug is required'}), 401
-
-    if chapter_no is None:
-        return jsonify({'error': 'Chapter number is required'}), 401
-
-    if sentence_no is None:
-        return jsonify({'error': 'Sentence number is required'}), 401
+    if text is None:
+        return jsonify({'error': 'Sentence number is required'}), 400
 
     if to_lang is None:
-        return jsonify({'error': 'Language is required'}), 401
+        return jsonify({'error': 'Language is required'}), 400
 
-    book = get_book_slug_map()[book_slug]
+    if to_lang not in LANGUAGES_CODES:
+        return jsonify({'error': 'Language is not supported'}), 400
 
-    translation_file = CACHE_DIR.joinpath("translations").joinpath(book.slug).joinpath(to_lang).joinpath(
-        f"{chapter_no}-{sentence_no}.txt")
-    translation_file.parent.mkdir(parents=True, exist_ok=True)
-    if translation_file.exists():
-        return jsonify({'translation': translation_file.read_text()})
+    s = SentenceDao.get_one(text, to_lang)
+    if s:
+        return jsonify({'translation': s.translation})
 
-    chapter = Chapter(int(chapter_no))
-    sentences_file = BOOKS_GENERATED_DIR.joinpath(book.slug).joinpath(chapter.sentences_file)
-    sentences = json.loads(sentences_file.read_text())
-    text = sentences[int(sentence_no) - 1]
-
-    translator = ChatGptTranslator(book.name)
-    translation = translator.translate(text, to_lang)
-    translation_file.write_text(translation)
+    translation = translate(text, to_lang)
+    SentenceDao.add_one(text, to_lang, translation)
     return jsonify({'translation': translation})
 
 

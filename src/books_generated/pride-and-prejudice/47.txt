@@ -153,7 +153,6 @@ chaise
 chance
 change
 changed
-chapter
 character
 charge
 charm
@@ -987,7 +986,6 @@ wounded
 write
 written
 wrote
-xlvii
 year
 yes
 yet

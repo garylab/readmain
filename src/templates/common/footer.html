@@ -9,14 +9,8 @@
     var offcanvasEl = document.getElementById('offcanvasRoot');
     var offcanvasContentEl = document.getElementById('offcanvasContent');
 
-    var contentEl = document.getElementById('chapter-main');
-    var chapterNo = contentEl.getAttribute('data-chapter-no');
-    var bookSlug = contentEl.getAttribute('data-book-slug');
-
-    var wordEls = contentEl.getElementsByTagName('i');
-    var sentenceButtonEls = contentEl.getElementsByTagName("s");
-
-    var LANGUAGE_SELECT_EL = document.getElementById('language-selector');
+    const ARTICLE_CONTENT_EL = document.getElementById('article-content');
+    const LANGUAGE_SELECT_EL = document.getElementById('language-selector');
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"></script>

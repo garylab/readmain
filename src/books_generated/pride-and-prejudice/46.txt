@@ -122,7 +122,6 @@ certain
 certainly
 chaise
 change
-chapter
 character
 charms
 choice
@@ -882,7 +881,6 @@ wretched
 write
 writing
 written
-xlvi
 yes
 yesterday
 yet

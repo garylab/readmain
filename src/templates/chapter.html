@@ -15,8 +15,7 @@
         </a>
     </section>
 
-    <article class="container box mt-2 mb-4" id="chapter-main" data-chapter-no="{{ chapter.no }}"
-         data-book-slug="{{ book.slug }}">
+    <article class="container box mt-2 mb-4" id="article-content">
         {{ content|safe }}
     </article>
 
@@ -35,54 +34,15 @@
 
 {% include 'common/footer.html' %}
 <script>
-    for (var i = 0; i < wordEls.length; i++) {
-        wordEls[i].addEventListener('click', function () {
-            var to_lang = document.getElementById('language-selector').value;
-            if (!to_lang) {
-                alert('Please select target language at top right');
-                return;
-            }
-            offcanvasTitleEl.innerHTML = 'Searching...';
-            offcanvasContentEl.innerHTML = '';
-            OFFCANVAS_INSTANCE.show();
-            searchDictionary(offcanvasTitleEl, offcanvasContentEl, this.innerText, to_lang);
-        });
-    }
-
     // Track scroll position and save progress when the user scrolls or leaves the page
     window.addEventListener('scroll', () => {
         saveReadingProgress(bookSlug, chapterNo, getFirstVisibleSentenceId());
     });
 
-    Array.from(sentenceButtonEls).forEach(function (p) {
-        p.addEventListener('click', function (event) {
-            p.classList.add('clicked');
-            var sentenceEl = event.currentTarget.parentElement;
-            var sentenceNo = event.currentTarget.getAttribute('id');
-
-            offcanvasTitleEl.innerHTML = '';
-            offcanvasContentEl.innerHTML = '';
-
-            const titleDiv = document.createElement('div');
-            titleDiv.classList.add('d-flex', 'justify-content-center');
-
-            const button = document.createElement('button');
-            button.innerText = 'Translate';
-            button.classList.add("btn", "btn-sm", "btn-outline-secondary", "me-2");
-            titleDiv.appendChild(button);
-
-            offcanvasTitleEl.appendChild(titleDiv);
-
-            // remove sentence no
-            offcanvasContentEl.innerHTML = sentenceEl.innerHTML;
-            OFFCANVAS_INSTANCE.show();
-
-            button.addEventListener('click', function () {
-                translateSentence(button, sentenceNo, offcanvasContentEl);
-            });
-        });
+    document.addEventListener('DOMContentLoaded', function () {
+        initWordTranslation();
+        initSentenceTranslation();
     });
-
 </script>
 </body>
 </html>

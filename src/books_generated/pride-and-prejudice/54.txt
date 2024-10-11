@@ -80,7 +80,6 @@ cases
 ceremonious
 chair
 chance
-chapter
 cheerful
 christmas
 close
@@ -269,7 +268,6 @@ let
 like
 likewise
 little
-liv
 lived
 lizzy
 long

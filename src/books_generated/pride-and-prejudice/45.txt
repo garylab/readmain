@@ -96,7 +96,6 @@ came
 carriage
 carried
 certainly
-chapter
 character
 cheerfully
 chestnuts
@@ -626,7 +625,6 @@ woody
 word
 would
 wrong
-xlv
 yes
 yet
 you

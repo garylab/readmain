@@ -53,14 +53,9 @@ function displayWordDefinition(offcanvasTitleEl, contentDiv, data) {
     });
 }
 
-async function translateSentence(button, sentenceNo, offcanvasContentEl) {
+async function translateSentence(button, sentenceText, offcanvasContentEl, toLang) {
     button.innerText = 'Translating...';
     button.disabled = true;
-    var to_lang = LANGUAGE_SELECT_EL.value;
-    if (!to_lang) {
-        alert('Please select target language at top right');
-        return;
-    }
     try {
         // Assuming you have an API endpoint that provides the translation
         const response = await fetch(TRANSLATION_URL, {
@@ -69,10 +64,8 @@ async function translateSentence(button, sentenceNo, offcanvasContentEl) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                book_slug: bookSlug,
-                chapter_no: chapterNo,
-                sentence_no: sentenceNo,
-                to_lang: to_lang,
+                text: sentenceText,
+                to_lang: toLang,
             })
         });
 
@@ -96,6 +89,64 @@ function playAudio(pronunciationId) {
     // Assuming there's an API endpoint to fetch and play audio by pronunciation ID
     const audio = new Audio(`/play?id=${pronunciationId}`);
     audio.play();
+}
+
+const initSentenceTranslation = function () {
+    const sentence_btn_els = ARTICLE_CONTENT_EL.getElementsByTagName("s");
+
+    Array.from(sentence_btn_els).forEach(function (s) {
+        s.addEventListener('click', function (event) {
+            s.classList.add('clicked');
+            var sentenceSpanEl = event.currentTarget.parentElement;
+            var sentenceText = sentenceSpanEl.querySelector('b').innerText;
+
+            offcanvasTitleEl.innerHTML = '';
+            offcanvasContentEl.innerHTML = '';
+
+            const titleDiv = document.createElement('div');
+            titleDiv.classList.add('d-flex', 'justify-content-center');
+
+            const button = document.createElement('button');
+            button.innerText = 'Translate';
+            button.classList.add("btn", "btn-sm", "btn-outline-secondary", "me-2");
+            titleDiv.appendChild(button);
+
+            offcanvasTitleEl.appendChild(titleDiv);
+
+            offcanvasContentEl.innerHTML = sentenceSpanEl.innerHTML;
+            OFFCANVAS_INSTANCE.show();
+
+            var toLang = LANGUAGE_SELECT_EL.value;
+            if (!toLang) {
+                alert('Please select target language at top right');
+                return;
+            }
+
+            button.addEventListener('click', function () {
+                translateSentence(button, sentenceText, offcanvasContentEl, toLang);
+            });
+        });
+    });
+}
+
+
+const initWordTranslation = function () {
+    const word_els = ARTICLE_CONTENT_EL.getElementsByTagName('i');
+
+    Array.from(word_els).forEach(function (w) {
+        w.addEventListener('click', function () {
+            var toLang = LANGUAGE_SELECT_EL.value;
+            if (!toLang) {
+                alert('Please select target language at top right');
+                return;
+            }
+
+            offcanvasTitleEl.innerHTML = 'Searching...';
+            offcanvasContentEl.innerHTML = '';
+            OFFCANVAS_INSTANCE.show();
+            searchDictionary(offcanvasTitleEl, offcanvasContentEl, this.innerText, toLang);
+        });
+    });
 }
 
 function batchAction(inputList, action) {
@@ -179,7 +230,6 @@ function loadReadingProgressToButton(buttonSelector) {
     Array.from(readButtonEls).forEach(buttonEl => {
         const bookSlug = buttonEl.dataset.bookSlug;
         const storedProgress = getReadingProgress(bookSlug);
-        console.log(storedProgress);
 
         if (storedProgress) {
             const {chapterNo, sentenceId} = JSON.parse(storedProgress);

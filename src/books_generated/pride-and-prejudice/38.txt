@@ -58,7 +58,6 @@ catherine
 certain
 certainly
 chaise
-chapter
 character
 charlotte
 charms
@@ -431,7 +430,6 @@ witness
 words
 world
 would
-xxxviii
 yet
 you
 young

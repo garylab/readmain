@@ -892,7 +892,6 @@ utter
 uttere
 uttered
 uttering
-v
 vaguely
 various
 very
