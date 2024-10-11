@@ -11,14 +11,14 @@
 <main>
     <section class="container box mt-5">
         <h2 class="fs-5">Books</h2>
-        <div class="row">
+        <div class="d-flex justify-content-evenly flex-wrap">
             {% for book in books %}
-                <div class="col-12 col-sm-4 d-flex justify-content-center">
+                <div class="d-flex justify-content-center">
                     <div class="card mt-3 border-0 text-center" style="width: 10rem;">
                         <a href="{{ url_for('get_book', book_slug=book.slug) }}">
                             <img src="{{ book.cover }}" class="card-img-top cover" alt="{{ book.name }}">
                         </a>
-                        <div class="card-body">
+                        <div class="card-body p-0">
                             <h5 class="card-title">
                                 <a href="{{ url_for('get_book', book_slug=book.slug) }}">
                                     {{ book.name }}
@@ -29,9 +29,6 @@
                                 Vocabulary: {{ summary.vocabulary_distribution[book.slug] }},
                                 Words: {{ summary.word_count_distribution[book.slug]|short_number }}
                             </p>
-                            <a class="btn btn-outline-secondary read-button"
-                               data-book-slug="{{ book.slug }}"
-                               href="{{ url_for('get_chapter', book_slug=book.slug, chapter_no=1) }}">Start Reading</a>
                         </div>
                     </div>
                 </div>
@@ -53,10 +50,5 @@
 </main>
 
 {% include 'common/footer.html' %}
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        loadReadingProgressToButton('.read-button');
-    });
-</script>
 </body>
 </html>
