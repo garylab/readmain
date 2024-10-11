@@ -74,10 +74,10 @@ def get_dictionary():
     text = request.args.get('text')
 
     if to_lang is None:
-        return jsonify({'error': 'Language is required'}), 401
+        return jsonify({'error': 'Language is required'}), 400
 
     if text is None:
-        return jsonify({'error': 'Translate text is required'}), 401
+        return jsonify({'error': 'Translate text is required'}), 400
 
     headers = {
         'Content-Type': 'application/json',
@@ -89,12 +89,14 @@ def get_dictionary():
         'text': text
     }
     response = requests.get(headers=headers, url=DICT_ENDPOINT, params=params)
+    if response.status_code != 200:
+        return jsonify({'error': response.json()['detail']}), response.status_code
 
     return jsonify(response.json())
 
 
 @app.post('/translate')
-def get_translate():
+def get_translation():
     book_slug = request.json.get('book_slug')
     chapter_no = request.json.get('chapter_no')
     sentence_no = request.json.get('sentence_no')

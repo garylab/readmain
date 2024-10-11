@@ -1,16 +1,28 @@
 async function searchDictionary(offcanvasTitleEl, offcanvasContentEl, word, to_lang) {
+    offcanvasTitleEl.innerHTML = word;
+
+    const params = {
+        text: word,
+        to_lang: to_lang
+    }
+
     try {
-        const response = await fetch(`/dictionary?to_lang=${to_lang}&text=${word}`);
+        const queryString = new URLSearchParams(params).toString();
+        const response = await fetch(`${DICTIONARY_URL}?${queryString}`, {"method": "GET"});
+
         const data = await response.json();
-        displayTranslation(offcanvasTitleEl, offcanvasContentEl, data);
+        if (!response.ok) {
+            offcanvasContentEl.innerHTML = `<p class="text-muted">${data.error}</p>`;
+            return;
+        }
+        displayWordDefinition(offcanvasTitleEl, offcanvasContentEl, data);
     } catch (error) {
-        offcanvasTitleEl.innerHTML = word;
-        offcanvasContentEl.innerHTML = '<i class="text-muted">No translation found</i>';
+        offcanvasContentEl.innerHTML = `<p class="text-muted">Get definition failed, please try again</p>`;
     }
 }
 
-function displayTranslation(offcanvasTitleEl, contentDiv, data) {
-    offcanvasTitleEl.innerText = `${data.word}`;
+function displayWordDefinition(offcanvasTitleEl, contentDiv, data) {
+    offcanvasTitleEl.innerHTML = `${data.word}`;
 
     const pronunciationSection = document.createElement('div');
     data.pronunciations.forEach(pronunciation => {
@@ -25,7 +37,7 @@ function displayTranslation(offcanvasTitleEl, contentDiv, data) {
     contentDiv.appendChild(pronunciationSection);
 
     // Group translations by posTag
-    const groupedTranslations = data.translations.reduce((acc, { posTag, translation }) => {
+    const groupedTranslations = data.translations.reduce((acc, {posTag, translation}) => {
         if (!acc[posTag]) {
             acc[posTag] = [];
         }
@@ -40,6 +52,45 @@ function displayTranslation(offcanvasTitleEl, contentDiv, data) {
         contentDiv.appendChild(groupSection);
     });
 }
+
+async function translateSentence(button, sentenceNo, offcanvasContentEl) {
+    button.innerText = 'Translating...';
+    button.disabled = true;
+    var to_lang = LANGUAGE_SELECT_EL.value;
+    if (!to_lang) {
+        alert('Please select target language at top right');
+        return;
+    }
+    try {
+        // Assuming you have an API endpoint that provides the translation
+        const response = await fetch(TRANSLATION_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                book_slug: bookSlug,
+                chapter_no: chapterNo,
+                sentence_no: sentenceNo,
+                to_lang: to_lang,
+            })
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            offcanvasContentEl.innerHTML = `<p class="text-muted">${data.error}</p>`;
+            button.disabled = false;
+            return;
+        }
+
+        offcanvasContentEl.innerHTML += '<div class="mt-3">' + data.translation + '</div>';
+        button.innerText = 'Translated';
+    } catch (error) {
+        offcanvasContentEl.innerHTML = '<p class="text-muted">Translate failed, please try again</p>';
+        button.disabled = false;
+    }
+}
+
 
 function playAudio(pronunciationId) {
     // Assuming there's an API endpoint to fetch and play audio by pronunciation ID
@@ -131,7 +182,7 @@ function loadReadingProgressToButton(buttonSelector) {
         console.log(storedProgress);
 
         if (storedProgress) {
-            const { chapterNo, sentenceId } = JSON.parse(storedProgress);
+            const {chapterNo, sentenceId} = JSON.parse(storedProgress);
             buttonEl.href = `/${bookSlug}/${chapterNo}.html#${sentenceId}`;
             buttonEl.innerText = `Continue Reading`;
         }

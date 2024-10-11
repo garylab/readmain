@@ -35,19 +35,6 @@
 
 {% include 'common/footer.html' %}
 <script>
-
-    var offcanvasTitleEl = document.getElementById('offcanvasTitle');
-    var offcanvasEl = document.getElementById('offcanvasRoot');
-    var offcanvasContentEl = document.getElementById('offcanvasContent');
-    var offcanvasInstance = new bootstrap.Offcanvas(offcanvasEl);
-
-    var contentEl = document.getElementById('chapter-main');
-    var chapterNo = contentEl.getAttribute('data-chapter-no');
-    var bookSlug = contentEl.getAttribute('data-book-slug');
-
-    var wordEls = contentEl.getElementsByTagName('i');
-    var sentenceButtonEls = contentEl.getElementsByTagName("s");
-
     for (var i = 0; i < wordEls.length; i++) {
         wordEls[i].addEventListener('click', function () {
             var to_lang = document.getElementById('language-selector').value;
@@ -57,16 +44,10 @@
             }
             offcanvasTitleEl.innerHTML = 'Searching...';
             offcanvasContentEl.innerHTML = '';
-            offcanvasInstance.show();
+            OFFCANVAS_INSTANCE.show();
             searchDictionary(offcanvasTitleEl, offcanvasContentEl, this.innerText, to_lang);
         });
     }
-
-
-    document.getElementById('setting-btn').addEventListener('click', function () {
-        console.log("setting button clicked")
-
-    });
 
     // Track scroll position and save progress when the user scrolls or leaves the page
     window.addEventListener('scroll', () => {
@@ -94,50 +75,13 @@
 
             // remove sentence no
             offcanvasContentEl.innerHTML = sentenceEl.innerHTML;
-            offcanvasInstance.show();
+            OFFCANVAS_INSTANCE.show();
 
             button.addEventListener('click', function () {
-                textTranslate(button, sentenceNo, offcanvasContentEl);
+                translateSentence(button, sentenceNo, offcanvasContentEl);
             });
         });
     });
-
-    async function textTranslate(button, sentenceNo, offcanvasContentEl) {
-        button.innerText = 'Translating...';
-        button.disabled = true;
-        var to_lang = document.getElementById('language-selector').value;
-        if (!to_lang) {
-            alert('Please select target language at top right');
-            return;
-        }
-        try {
-            // Assuming you have an API endpoint that provides the translation
-            const response = await fetch(`/translate`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    book_slug: bookSlug,
-                    chapter_no: chapterNo,
-                    sentence_no: sentenceNo,
-                    to_lang: to_lang,
-                })
-            });
-
-            const data = await response.json();
-            if (!response.ok) {
-                alert(data.error);
-                return;
-            }
-
-            offcanvasContentEl.innerHTML += '<div class="mt-3">' + data.translation + '</div>';
-            button.innerText = 'Translated';
-        } catch (error) {
-            offcanvasContentEl.innerHTML = '<p class="text-muted">Translate failed, please try again</p>';
-            button.disabled = false;
-        }
-    }
 
 </script>
 </body>
