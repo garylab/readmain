@@ -31,13 +31,13 @@ h1 {text-align: center; margin: 1rem 0;}
 img {max-width: 100%; margin-bottom: 1rem;}
 a {text-decoration: none;}
 
-#article-content b {
+.article-content b {
     font-weight: normal;
 }
-#article-content i {
+.article-content i {
     font-style: normal;
 }
-#article-content s {
+.article-content s {
     text-decoration: none;
     text-align: center;
     cursor: pointer;
@@ -52,13 +52,13 @@ a {text-decoration: none;}
     margin-right: 0.125rem !important;
 }
 
-.bg-dark #article-content s {
+.bg-dark .article-content s {
     border-color: #6c757d;
     color: #6c757d;
 }
 
-#article-content s.clicked,
-.bg-dark #article-content s.clicked {
+.article-content s.clicked,
+.bg-dark .article-content s.clicked {
     color: #fff;
     background-color: #6c757d;
     border-color: #6c757d;

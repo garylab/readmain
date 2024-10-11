@@ -30,10 +30,10 @@ def prepare_root_dir():
 
 
 def parse_chapter(chapter, original_content):
-    title, tagged_content, sentences, chapter_vocabulary, chapter_word_count = tagged_html(original_content)
+    tagged_content, sentences, chapter_vocabulary, chapter_word_count = tagged_html(original_content)
     print(f"chapter #{chapter.no} parsed.")
 
-    return chapter, title, tagged_content, sentences, chapter_vocabulary, chapter_word_count
+    return chapter, tagged_content, sentences, chapter_vocabulary, chapter_word_count
 
 
 def sort_dict_by_key(d: dict) -> dict:
@@ -59,13 +59,10 @@ def generate(book: Book) -> (set, int):
             futures.append(executor.submit(parse_chapter, chapter, original_content))
 
     for future in as_completed(futures):
-        chapter, title, tagged_content, sentences, chapter_vocabulary, chapter_word_count = future.result()
+        chapter, tagged_content, sentences, chapter_vocabulary, chapter_word_count = future.result()
 
         tagged_html_file = generated_book_dir.joinpath(chapter.html_file)
         tagged_html_file.write_text(tagged_content)
-
-        sentences_file = generated_book_dir.joinpath(chapter.sentences_file)
-        sentences_file.write_text(json.dumps(sentences, ensure_ascii=False, indent=2))
 
         chapter_vocabulary_file = generated_book_dir.joinpath(chapter.vocabulary_file)
         chapter_vocabulary_file.write_text('\n'.join(sorted(list(chapter_vocabulary))))

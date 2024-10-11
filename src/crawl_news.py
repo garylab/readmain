@@ -61,7 +61,6 @@ if __name__ == '__main__':
             tagged_content_html=tagged_content,
             vocabulary_count=len(vocabulary),
             word_count=word_count,
-            sentences='\n'.join(sentences),
             vocabulary='\n'.join(sorted(list(vocabulary))),
             date=str_to_datetime(result['highlight']['date'])
         )

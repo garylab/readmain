@@ -18,13 +18,6 @@ def _get_words(text: str):
 def tagged_html(input_html: str) -> (str, str, List[str], Set[str], int):
     soup = BeautifulSoup(input_html, 'html.parser')
 
-    first_h1 = soup.find('h1')
-    if not first_h1:
-        raise ValueError('No <h1> tag found in the HTML')
-
-    title = first_h1.get_text().strip()
-    first_h1.decompose()
-
     all_sentences = []
     sentence_no = 0
     all_vocabulary = set()
@@ -39,7 +32,7 @@ def tagged_html(input_html: str) -> (str, str, List[str], Set[str], int):
         all_sentences.extend(sentences)
 
     content = str(soup)
-    return title, content, all_sentences, all_vocabulary, all_word_count
+    return content, all_sentences, all_vocabulary, all_word_count
 
 
 def _process_tag(tag, sentence_no, all_vocabulary) -> (int, List[str], int):
