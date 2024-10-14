@@ -8,12 +8,13 @@ def test_parse_cnn():
     input_file = TEST_FILES_DIR.joinpath("news").joinpath('cnn.html')
     input_html = input_file.read_text()
     content_html = parse_cnn(input_html)
+    assert content_html.strip() != ''
     assert "I can continue chasing that" in content_html
     assert "At the end of the day, we’re doing this for them" in content_html
 
 
 @pytest.mark.parametrize("segment", [
-    '<img src="https://ichef.bbci.co.uk/news/480/cpsprodpb/8347/live/87c5d670-84c8-11ef-83dd-fbf1b9732cf0.jpg.webp"/>',
+    'src="https://ichef.bbci.co.uk/news/480/cpsprodpb/8347/live/87c5d670-84c8-11ef-83dd-fbf1b9732cf0.jpg.webp"',
     "A former Met Police officer has been charged with eight sexual offences against two women.",
     "The 49-year-old will appear at Westminster Magistrates' Court on 17 October.",
     " He said: \"The charges come in the wake of an extensive and complex investigation conducted over a period of several months.\"",
@@ -22,6 +23,7 @@ def test_parse_bbc(segment: str):
     input_file = TEST_FILES_DIR.joinpath("news").joinpath('bbc.html')
     input_html = input_file.read_text()
     content_html = parse_bbc(input_html)
+    assert content_html.strip() != ''
     assert segment in content_html
     assert 'Sign up for our Politics Essential newsletter' not in content_html
 
@@ -37,7 +39,9 @@ def test_parse_bbc2(segment: str):
     input_html = input_file.read_text()
     content_html = parse_bbc(input_html)
     assert segment in content_html
+    assert content_html.strip() != ''
     assert 'Sign up for our Politics Essential newsletter' not in content_html
+    assert '/bbcx/grey-placeholder.png' not in content_html
 
 
 @pytest.mark.parametrize("segment", [
@@ -53,4 +57,5 @@ def test_parse_bbc3(segment: str):
     input_html = input_file.read_text()
     content_html = parse_bbc(input_html)
     assert segment in content_html
+    assert content_html.strip() != ''
     assert 'Sign up for our Politics Essential newsletter' not in content_html

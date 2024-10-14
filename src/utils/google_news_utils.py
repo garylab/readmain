@@ -45,7 +45,7 @@ def parse_cnn(html: str) -> str:
     tags = soup.find_all(['p', 'img'])
 
     clean_attr(tags)
-    return ''.join(str(tag) for tag in tags)
+    return join_tags(tags)
 
 
 def parse_bbc(html: str) -> str:
@@ -61,12 +61,20 @@ def parse_bbc(html: str) -> str:
         all_tags.extend(tags)
 
     clean_attr(all_tags)
-    return ''.join(str(tag) for tag in all_tags)
+    return join_tags(all_tags)
+
+
+def join_tags(tags: list) -> str:
+    return ''.join(str(tag) for tag in tags if not tag.decomposed)
 
 
 def clean_attr(tags: list):
     for tag in tags:
-        if tag.name == 'p':
+        if tag.name in ('p', 'h2', 'h3'):
+            if not tag.text.strip():
+                tag.decompose()
+                continue
+
             tag.attrs = {}
             remove_comment(tag)
 
@@ -75,10 +83,13 @@ def clean_attr(tags: list):
                     sub_tag.unwrap()
                 else:
                     sub_tag.attrs = {}
-        elif tag.name == 'img' and tag.get('src').startswith('http'):
-            src = tag.get('src')
-            tag.attrs = {}
-            tag.attrs = {'src':  src}
+        elif tag.name == 'img':
+            src = tag.get('src', '')
+            alt = tag.get('alt', '')
+            if not src or src == '/bbcx/grey-placeholder.png':
+                tag.decompose()
+            else:
+                tag.attrs = {'src':  src, 'alt': alt}
 
 
 def remove_comment(tag: BeautifulSoup):
