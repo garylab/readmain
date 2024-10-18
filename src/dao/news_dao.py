@@ -13,6 +13,12 @@ class NewsDao:
             return news.id
 
     @staticmethod
+    def update_one(news: News):
+        with DbSession() as session:
+            session.merge(news)
+            session.commit()
+
+    @staticmethod
     def get_latest(size: int = 2) -> List[News]:
         with DbSession() as session:
             return session.query(News).order_by(News.date.desc()).limit(size).all()

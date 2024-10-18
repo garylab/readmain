@@ -95,9 +95,6 @@ function speechSentence(sourceType, sourceId, sentenceNo, voice) {
     const new_audio_url = `${PLAY_SENTENCE_URL}?${getQueryString(params)}`;
     const new_audio = new Audio(new_audio_url);
 
-    console.log(new_audio_url);
-    console.log(currentAudio?.src);
-
     // if current audio is empty, play new audio
     if (!currentAudio) {
         currentAudio = new_audio;
