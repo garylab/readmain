@@ -12,7 +12,7 @@
 
 <main>
   <section class="container box my-4">
-      <h1 class="text-center py-3">Pricing</h1>
+    <h1 class="text-center py-3">Pricing</h1>
   </section>
 
   <section class="container box my-4">
@@ -24,27 +24,16 @@
               <h4 class="my-0 fw-normal">{{ price.name }}</h4>
             </div>
             <div class="card-body">
-              <div class="card-subtitle pricing-card-title fw-light">
-                                <span class="text-decoration-line-through">
-                                    {% if price.market_price %}
-                                      ¥{{ price.market_price }}/{{ price.expand_months }}个月
-                                    {% else %}
-                                      -
-                                    {% endif %}
-                                </span>
-              </div>
               <h1 class="card-title pricing-card-title">
-                                <span>¥{{ price.selling_price }}
-                                  {% if price.selling_price %}
-                                    <small class="text-muted fw-light">/{{ price.expand_months }}个月</small>
-                                  {% endif %}
-                                </span>
+                <span>${{ price.selling_price }}
+                    <small class="text-muted fw-lighter" style="font-size: 1rem;">/{{ price.expand_months }}</small>
+                </span>
               </h1>
               <ul class="list-unstyled mt-3 mb-4">
                 {% for feature in price.features %}
-                    <li class="mb-3">
-                      {{ feature.title }} <span class="text-success text-lighter small">{{ feature.count }}</span>
-                    </li>
+                  <li class="mb-3">
+                    {{ feature.title }} <span class="text-success text-lighter small">{{ feature.count }}</span>
+                  </li>
                 {% endfor %}
               </ul>
 
@@ -64,16 +53,6 @@
         </div>
       {% endfor %}
 
-    </div>
-  </section>
-
-  <section class="container box my-4">
-    <div class="text-muted small">
-      <ul>
-        <li>本站只有开放用户和Pro用户两种用户形式。</li>
-        <li>付费用户到期后，原有的收藏职位个数不会减少，而是在取消收藏后不能重新添加。</li>
-        <li>付费用户到期后，原有的简历个数不会减少，而是在删除后不能创建新的简历。</li>
-      </ul>
     </div>
   </section>
 
