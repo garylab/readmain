@@ -3,7 +3,7 @@ services:
     build: .
     restart: unless-stopped
     volumes:
-      - ./cache:/workspace/cache
+      - ./logs:/workspace/logs
     env_file:
       - local.env
     ports:
