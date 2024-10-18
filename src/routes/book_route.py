@@ -7,6 +7,11 @@ from src.utils.book_utils import get_prev_next_chapter_urls
 bp = Blueprint('book', __name__)
 
 
+@bp.context_processor
+def inject_global_variables():
+    return dict(navname='book')
+
+
 @bp.get('/<book_slug>.html')
 def get_book(book_slug: str):
     book = BookDao.get_by_slug(book_slug)

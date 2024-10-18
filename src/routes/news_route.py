@@ -5,6 +5,11 @@ from src.dao.news_dao import NewsDao
 bp = Blueprint('news', __name__)
 
 
+@bp.context_processor
+def inject_global_variables():
+    return dict(navname='news')
+
+
 @bp.get('/news.html')
 def get_all_news():
     page = request.args.get('page', 1, int)
