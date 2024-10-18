@@ -1,12 +1,11 @@
-import json
 import logging
 
-from src.constants.config import CACHE_DIR, LOG_DIR
+from src.constants.config import LOG_DIR
 from src.constants.enums import SentenceSource
 from src.dao.sentence_vocabulary_dao import SentenceVocabularyDao
 from src.db.entity import News
 from src.utils.html_utils import tagged_html, wrap_title
-from src.utils.date_utils import get_now_filename, str_to_datetime
+from src.utils.date_utils import str_to_datetime
 from src.utils.google_news_utils import parse_cnn, parse_bbc, get_google_news, check_url, get_html
 from src.dao.news_dao import NewsDao
 from src.utils.logging_utils import init_logging
@@ -24,10 +23,8 @@ publications = {
 
 if __name__ == '__main__':
     init_logging(LOG_DIR.joinpath("crawl_news.log"))
-    news_results = get_google_news()
-    CACHE_DIR.joinpath("news").mkdir(parents=True, exist_ok=True)
-    CACHE_DIR.joinpath("news").joinpath(f"{get_now_filename()}.json").write_text(json.dumps(news_results, indent=2))
 
+    news_results = get_google_news()
     for result in news_results['news_results']:
         if 'highlight' not in result:
             continue

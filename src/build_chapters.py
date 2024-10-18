@@ -5,9 +5,7 @@ from src.constants.config import BOOKS_DIR, LOG_DIR
 from src.constants.enums import SentenceSource
 from src.dao.book_dao import BookDao
 from src.dao.chapter_dao import ChapterDao
-from src.dao.sentence_audio_dao import SentenceAudioDao
 from src.dao.sentence_dao import SentenceDao
-from src.dao.sentence_translation_dao import SentenceTranslationDao
 from src.dao.sentence_vocabulary_dao import SentenceVocabularyDao
 from src.db.entity import Book, Chapter
 from src.dto.html_dto import ParsedHtml

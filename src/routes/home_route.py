@@ -1,7 +1,7 @@
 import json
 from flask import Blueprint, render_template
 
-from src.constants.config import HOME_NEWS_NUM, BOOKS_GENERATED_DIR
+from src.constants.config import HOME_NEWS_NUM
 from src.dao.book_dao import BookDao
 from src.dao.news_dao import NewsDao
 
@@ -16,8 +16,5 @@ def health():
 @bp.get('/')
 def home():
     news = NewsDao.get_latest(HOME_NEWS_NUM)
-
-    summary_file = BOOKS_GENERATED_DIR.joinpath("summary.json")
-    summary = json.loads(summary_file.read_text())
-    return render_template('home.html', books=BookDao.get_all(), summary=summary, news=news)
+    return render_template('home.html', books=BookDao.get_all(), news=news)
 

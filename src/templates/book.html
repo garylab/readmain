@@ -43,11 +43,11 @@
 
             <div class="progress w-25" role="progressbar" aria-label="Info example"
                  style="height: 0.85rem"
-                 aria-valuenow="{{ summary.vocabulary_distribution[chapter.no|string] }}"
+                 aria-valuenow="{{ 30 }}"
                  aria-valuemin="0"
-                 aria-valuemax="{{ max_word_count }}">
-              <div class="progress-bar bg-secondary" style="width: {{ summary.vocabulary_distribution[chapter.no|string] * 100 // max_word_count }}%">
-          {{ summary.vocabulary_distribution[chapter.no|string] }}
+                 aria-valuemax="{{ 31 }}">
+              <div class="progress-bar bg-secondary" style="width: {{ 30 * 100 // 30 }}%">
+          4 / 30
               </div>
             </div>
 

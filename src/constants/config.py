@@ -3,10 +3,8 @@ from pathlib import Path
 
 APP_DIR = Path(__file__).parent.parent.parent
 SRC_DIR = APP_DIR.joinpath("src")
-CACHE_DIR = APP_DIR.joinpath("cache")
-LOG_DIR = CACHE_DIR.joinpath("logs")
+LOG_DIR = APP_DIR.joinpath("logs")
 BOOKS_DIR = SRC_DIR.joinpath("books")
-BOOKS_GENERATED_DIR = SRC_DIR.joinpath("books_generated")
 
 DICT_ENDPOINT = os.getenv("DICT_ENDPOINT")
 AUDIO_ENDPOINT = os.getenv("AUDIO_ENDPOINT")
