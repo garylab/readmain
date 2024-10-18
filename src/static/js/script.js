@@ -87,16 +87,44 @@ function speechWord(pronunciationId) {
     audio.play();
 }
 
+
+let currentAudio = null;
+
 function speechSentence(sourceType, sourceId, sentenceNo, voice) {
-    const params = {
-        source_type: sourceType,
-        source_id: sourceId,
-        sentence_no: sentenceNo,
-        voice: voice
-    };
-    const audio_url = `${PLAY_SENTENCE_URL}?${getQueryString(params)}`;
-    const audio = new Audio(audio_url);
-    audio.play();
+    const params = {source_type: sourceType, source_id: sourceId, sentence_no: sentenceNo, voice: voice};
+    const new_audio_url = `${PLAY_SENTENCE_URL}?${getQueryString(params)}`;
+    const new_audio = new Audio(new_audio_url);
+
+    console.log(new_audio_url);
+    console.log(currentAudio?.src);
+
+    // if current audio is empty, play new audio
+    if (!currentAudio) {
+        currentAudio = new_audio;
+        currentAudio.play();
+        return;
+    }
+
+    const currentSrc = currentAudio.src;
+    // if current audio is same audio and playing, stop it
+    if (currentSrc === new_audio_url && !currentAudio.paused) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        return;
+    }
+
+    // if current audio is same audio and not playing, play it audio
+    if (currentSrc === new_audio_url && currentAudio.paused) {
+        currentAudio.play();
+        return;
+    }
+
+    // if current audio is different audio, stop current audio and play new audio
+    if (currentSrc !== new_audio_url) {
+        currentAudio.pause();
+        currentAudio = new_audio;
+        currentAudio.play();
+    }
 }
 
 const createBtn = function(text) {
