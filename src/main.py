@@ -1,6 +1,7 @@
 from flask import Flask, request, session
+from werkzeug.middleware.proxy_fix import ProxyFix
 
-from src.constants.config import STATIC_VERSION, LOG_DIR
+from src.constants.config import STATIC_VERSION, LOG_DIR, PROXY_NUM_BEFORE_APP
 from src.constants.languages import SUPPORTED_LANGUAGES
 from src.routes import home_route, auth_route, book_route, news_route, tool_route, bill_route
 from src.utils.date_utils import time_ago
@@ -10,6 +11,12 @@ from src.utils.number_utils import short_number
 app = Flask(__name__)
 app.secret_key = 'JDYUF82opufd89sa!@8(u23o'
 init_logging(LOG_DIR.joinpath("web.log"))
+
+if PROXY_NUM_BEFORE_APP > 0:
+    n = PROXY_NUM_BEFORE_APP
+    app.wsgi_app = ProxyFix(
+        app.wsgi_app, x_for=n, x_proto=n, x_host=n, x_prefix=n, x_port=n
+    )
 
 app.register_blueprint(home_route.bp)
 app.register_blueprint(auth_route.bp)
