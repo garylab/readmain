@@ -140,6 +140,12 @@ const initSentenceTranslation = function (sourceType, sourceId) {
             var sentenceSpanEl = event.currentTarget.parentElement;
             var sentenceNo = event.currentTarget.innerText;
 
+            var toLang = LANGUAGE_SELECT_EL.value;
+            if (!toLang) {
+                alert('Please select target language at top right');
+                return;
+            }
+
             offcanvasTitleEl.innerHTML = '';
             offcanvasContentEl.innerHTML = '';
 
@@ -159,12 +165,6 @@ const initSentenceTranslation = function (sourceType, sourceId) {
 
             offcanvasContentEl.innerHTML = sentenceSpanEl.innerHTML;
             OFFCANVAS_INSTANCE.show();
-
-            var toLang = LANGUAGE_SELECT_EL.value;
-            if (!toLang) {
-                alert('Please select target language at top right');
-                return;
-            }
 
             translateBtn.addEventListener('click', async function () {
                 await translateSentence(translateBtn, sourceType, sourceId, sentenceNo, offcanvasContentEl, toLang);
