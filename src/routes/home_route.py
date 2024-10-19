@@ -7,6 +7,10 @@ from src.dao.news_dao import NewsDao
 
 bp = Blueprint('home', __name__)
 
+@bp.context_processor
+def inject_global_variables():
+    return dict(navname='home')
+
 
 @bp.get("/health")
 def health():

@@ -9,7 +9,14 @@ bp = Blueprint('book', __name__)
 
 @bp.context_processor
 def inject_global_variables():
-    return dict(navname='book')
+    return dict(navname='books')
+
+
+@bp.get('/books.html')
+def get_books():
+    books=BookDao.get_all()
+    return render_template('books-home.html',
+                           books=books)
 
 
 @bp.get('/<book_slug>.html')

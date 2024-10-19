@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ sitename }} - Featured Books For English Learning</title>
-    <meta name="description" content="Readin offers three classic English books, complete with word and sentence translations, tailored for English learners seeking to improve their language skills.">
+    <title>World News Read Online Free - {{ sitename }}</title>
+    <meta name="description" content="">
 
     <link rel="canonical" href="{{ url_for('news.get_all_news') }}" />
     {% include 'common/head_meta.html' %}
@@ -13,7 +13,7 @@
 
 <main>
     <section class="container box my-5">
-        <h1 class="fs-5 text-start">All News</h1>
+        <h1 class="fs-5 text-start">All news</h1>
         <ol>
             {%  for n in all_news %}
                 <li class="my-2">
