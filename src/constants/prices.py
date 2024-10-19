@@ -14,10 +14,10 @@ PRICES = [
             {"count": " × Unlimited", "title": "Preferences saving"},
             {"count": " × Unlimited", "title": "Word Saving"},
             {"count": " × Unlimited", "title": "Sentence Saving"},
+            {"count": " × Unlimited", "title": "Word translation"},
+            {"count": " × Unlimited", "title": "Word Audio Playing"},
 
-            {"count": f" × {FREE_PLAN_REQUEST_LIMIT} shared", "title": "Word translation"},
             {"count": f" × {FREE_PLAN_REQUEST_LIMIT} shared", "title": "Sentence translation"},
-            {"count": f" × {FREE_PLAN_REQUEST_LIMIT} shared", "title": "Word Audio Playing"},
             {"count": f" × {FREE_PLAN_REQUEST_LIMIT} shared", "title": "Sentence Audio Playing"},
 
             {"count": " × 0", "title": "Vocabulary Exporting"},
@@ -40,10 +40,10 @@ PRICES = [
             {"count": " × Unlimited", "title": "Preferences saving"},
             {"count": " × Unlimited", "title": "Word Saving"},
             {"count": " × Unlimited", "title": "Sentence Saving"},
-
             {"count": " × Unlimited", "title": "Word translation"},
-            {"count": " × Unlimited", "title": "Sentence translation"},
             {"count": " × Unlimited", "title": "Word Audio Playing"},
+
+            {"count": " × Unlimited", "title": "Sentence translation"},
             {"count": " × Unlimited", "title": "Sentence Audio Playing"},
 
             {"count": " × Unlimited", "title": "Vocabulary Exporting"},
