@@ -17,7 +17,6 @@ bp = Blueprint('tool', __name__)
 
 
 @bp.get('/dictionary')
-@api_login_required
 def get_dictionary():
     from_lang = request.args.get('from_lang', 'en')
     to_lang = request.args.get('to_lang')
