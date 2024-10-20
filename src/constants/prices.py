@@ -2,11 +2,10 @@ from src.constants.config import FREE_PLAN_REQUEST_LIMIT, STRIPE_PREMIUM_ID, STR
 
 PRICES = [
     {
-        "id": 1,
-        "name": "Free",
-        "description": "Free forever",
         "stripe_price_id": "",
         "stripe_price_mode": "",
+        "name": "Free",
+        "description": "Free forever",
         "highlight": 0,
         "selling_price": 0,
         "expand_months": 'month',
@@ -29,11 +28,10 @@ PRICES = [
         ]
     },
     {
-        "id": 2,
-        "name": "Premium Plus",
-        "description": "Unlimited access continuously, can be canceled at any time",
         "stripe_price_id": STRIPE_PREMIUM_PLUS_ID,
         "stripe_price_mode": "subscription",
+        "name": "Premium Plus",
+        "description": "Unlimited access continuously, can be canceled at any time",
         "highlight": 1,
         "selling_price": 19.9,
         "expand_months": 'month',
@@ -57,11 +55,10 @@ PRICES = [
         ]
     },
     {
-        "id": 3,
-        "name": "Premium",
-        "description": "Unlimited access in 1 month",
         "stripe_price_id": STRIPE_PREMIUM_ID,
         "strip_price_mode": "payment",
+        "name": "Premium",
+        "description": "Unlimited access in 1 month",
         "highlight": 0,
         "selling_price": 24.9,
         "expand_months": 'month',
@@ -85,4 +82,4 @@ PRICES = [
     }
 ]
 
-STRIPE_PRICE_MAP = {price["id"]: price for price in PRICES}
+STRIPE_PRICE_MAP = {price["stripe_price_id"]: price for price in PRICES}

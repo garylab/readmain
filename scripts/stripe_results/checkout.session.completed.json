@@ -1,0 +1,117 @@
+{
+  "id": "evt_1QC4AfFoYx3HMmd14GzPnsyP",
+  "object": "event",
+  "api_version": "2024-09-30.acacia",
+  "created": 1729450089,
+  "data": {
+    "object": {
+      "id": "cs_test_a1RBfBqoPagYyA05iW5HxsT0Ag4JJpublaRfBcpRtapKhYuu1tIBXerPTZ",
+      "object": "checkout.session",
+      "after_expiration": null,
+      "allow_promotion_codes": null,
+      "amount_subtotal": 1990,
+      "amount_total": 1990,
+      "automatic_tax": {
+        "enabled": false,
+        "liability": null,
+        "status": null
+      },
+      "billing_address_collection": null,
+      "cancel_url": "http://localhost:9000/bill/cancel",
+      "client_reference_id": "2",
+      "client_secret": null,
+      "consent": null,
+      "consent_collection": null,
+      "created": 1729450065,
+      "currency": "usd",
+      "currency_conversion": null,
+      "custom_fields": [
+
+      ],
+      "custom_text": {
+        "after_submit": null,
+        "shipping_address": null,
+        "submit": null,
+        "terms_of_service_acceptance": null
+      },
+      "customer": "cus_R4CZuWB1M0fr94",
+      "customer_creation": "always",
+      "customer_details": {
+        "address": {
+          "city": null,
+          "country": "AE",
+          "line1": null,
+          "line2": null,
+          "postal_code": null,
+          "state": null
+        },
+        "email": "galley.meng@gmail.com",
+        "name": "Garrry",
+        "phone": null,
+        "tax_exempt": "none",
+        "tax_ids": [
+
+        ]
+      },
+      "customer_email": "galley.meng@gmail.com",
+      "expires_at": 1729536465,
+      "invoice": "in_1QC4AdFoYx3HMmd145JOolLl",
+      "invoice_creation": null,
+      "livemode": false,
+      "locale": null,
+      "metadata": {
+        "price_id": "price_1QBttpFoYx3HMmd1hdNFzBUU"
+      },
+      "mode": "subscription",
+      "payment_intent": null,
+      "payment_link": null,
+      "payment_method_collection": "always",
+      "payment_method_configuration_details": null,
+      "payment_method_options": {
+        "card": {
+          "request_three_d_secure": "automatic"
+        }
+      },
+      "payment_method_types": [
+        "card"
+      ],
+      "payment_status": "paid",
+      "phone_number_collection": {
+        "enabled": false
+      },
+      "recovered_from": null,
+      "saved_payment_method_options": {
+        "allow_redisplay_filters": [
+          "always"
+        ],
+        "payment_method_remove": null,
+        "payment_method_save": null
+      },
+      "setup_intent": null,
+      "shipping_address_collection": null,
+      "shipping_cost": null,
+      "shipping_details": null,
+      "shipping_options": [
+
+      ],
+      "status": "complete",
+      "submit_type": null,
+      "subscription": "sub_1QC4AdFoYx3HMmd1y7U7TCxS",
+      "success_url": "http://localhost:9000/bill/success",
+      "total_details": {
+        "amount_discount": 0,
+        "amount_shipping": 0,
+        "amount_tax": 0
+      },
+      "ui_mode": "hosted",
+      "url": null
+    }
+  },
+  "livemode": false,
+  "pending_webhooks": 2,
+  "request": {
+    "id": null,
+    "idempotency_key": null
+  },
+  "type": "checkout.session.completed"
+}

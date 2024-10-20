@@ -44,7 +44,7 @@
 
                 <button type="button"
                         class="buy w-100 btn {% if price.highlight %}btn-success{% else %}btn-outline-success{% endif %}"
-                        {% if not user %}onclick="alert('Please Login to go');return;"{% endif %} data-price-id="{{price.id}}">Go
+                        {% if not user %}onclick="alert('Please Login to go');return;"{% endif %} data-price-id="{{price.stripe_price_id}}">Go
                 </button>
 
             </div>

@@ -10,6 +10,9 @@ def get_now():
 def get_delta_days(days: int) -> datetime:
     return get_now() + timedelta(days=days)
 
+def get_delta_days_from(date: datetime, days: int) -> datetime:
+    return set_utc_tz(date) + timedelta(days=days)
+
 
 def get_now_filename():
     return get_now().strftime("%Y%m%d%H%M%S")

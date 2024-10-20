@@ -35,14 +35,14 @@ def create_session():
         return Json.error("Please login to continue", 403)
 
     json_data = request.get_json()
-    price_id = int(json_data.get('price_id', ''))
+    price_id = json_data.get('price_id', '')
+    if not price_id:
+        return Json.error("You don't need to pay for free plan", 400)
+
     if price_id not in STRIPE_PRICE_MAP:
         return Json.error("Could not find the price", 400)
 
     price = STRIPE_PRICE_MAP[price_id]
-    if not price["stripe_price_id"]:
-        return Json.error("You don't need to pay for free plan", 400)
-
     user = session["user"]
     try:
         checkout_session = stripe.checkout.Session.create(
@@ -51,7 +51,7 @@ def create_session():
             mode=price["stripe_price_mode"],
             client_reference_id=user["id"],
             customer_email=user["email"],
-            line_items=[{"price": price["stripe_price_id"], "quantity": 1}],
+            line_items=[{"price": price_id, "quantity": 1}],
             metadata={"price_id": price_id},
         )
         return Json.ok({"sessionId": checkout_session["id"]})
