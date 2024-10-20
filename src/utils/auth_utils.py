@@ -44,5 +44,5 @@ def is_premium() -> bool:
     if is_future(session["user"]["premium_expired_at"]):
         return True
 
-    user = UserDao.get_user_by_id(session["user"]["id"])
+    user = UserDao.get_by_id(session["user"]["id"])
     return is_future(user.premium_expired_at)

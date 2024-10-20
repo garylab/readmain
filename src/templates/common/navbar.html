@@ -33,6 +33,7 @@
                 {{ user.name }}
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="{{ url_for('user.get_profile') }}">Profile</a></li>
                 <li><a class="dropdown-item" href="#">Glossary</a></li>
                 <li><a class="dropdown-item" href="">Sentences</a></li>
                 <li><a class="dropdown-item" href="{{ url_for('auth.logout') }}" rel="nofollow">Logout</a></li>

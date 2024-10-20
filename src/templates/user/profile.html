@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Profile - {{ sitename }}</title>
+  {% include 'common/head_meta.html' %}
+</head>
+<body class="{% if user_settings.darkMode == 'dark' %}bg-dark text-light{% endif %}" style="font-size: {{ user_settings.fontSize }};">
+
+{% include 'common/navbar.html' %}
+
+<main>
+    <section class="container box my-5">
+      <div class="row">
+        <div class="col-12 col-md-4 col-lg-3 col-xl-2">
+          {% include 'user/sidebar.html' %}
+        </div>
+
+        <div class="col-12 col-md-8 col-lg-9 col-xl-10">
+
+            <div class="col-12 mb-3">
+              <h2>Name</h2>
+             <p>{{ user.name }}</p>
+            </div>
+
+          <div class="col-12 mb-3">
+            <h2>Email</h2>
+            <p>{{ user.email }}</p>
+          </div>
+
+            <div class="col-12 mb-3">
+              <h2>Premium expire time</h2>
+
+                <p>
+                  <span class="fs-light {% if user.premium_expired_at|is_future %}text-success{% else %}text-muted{% endif %}">
+                    {{ user.premium_expired_at }} (UTC Time)
+                  </span>
+                </p>
+
+            </div>
+
+        </div>
+      </div>
+    </section>
+
+</main>
+
+{% include 'common/footer.html' %}
+</body>
+</html>

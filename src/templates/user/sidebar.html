@@ -1,0 +1,20 @@
+<div class="card mb-3 w-100">
+  <div class="card-body">
+    <div class="card-title">
+      <h2>Profile</h2>
+    </div>
+    <div class="">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link text-general {{ 'active' if request.path == '/user/profile' else '' }}" href="{{url_for('user.get_profile')}}">Profile</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-general {{ 'active' if request.path == '/user/saved_job' else '' }}" href="#">Glossary</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-general {{ 'active' if request.path == '/user/saved_job' else '' }}" href="#">Sentences</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
