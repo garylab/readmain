@@ -17,6 +17,7 @@ Then:
 brew install stripe/stripe-cli/stripe
 stripe login
 
+# you will see the webhook secret after running this command
 stripe listen --forward-to localhost:9000/bill/webhook
 
 ```

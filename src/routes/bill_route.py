@@ -1,9 +1,11 @@
+import logging
+
 import stripe
 from flask import Blueprint, render_template, request, url_for, session
-from sqlalchemy.testing.plugin.plugin_base import logging
 
-from src.constants.config import STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET, STRIPE_PRICES
-from src.constants.prices import PRICES
+
+from src.constants.config import STRIPE_PUBLISHABLE_KEY, STRIPE_WEBHOOK_SECRET
+from src.constants.prices import PRICES, STRIPE_PRICE_MAP
 from src.dao.user_dao import UserDao
 from src.dto.json_dto import Json
 from src.utils.auth_utils import is_logged_out
@@ -33,19 +35,23 @@ def create_session():
         return Json.error("Please login to continue", 403)
 
     json_data = request.get_json()
-    price_id = json_data.get('price_id', '')
-    if price_id not in STRIPE_PRICES:
-        return Json.error("Could not find the prices", 400)
+    price_id = int(json_data.get('price_id', ''))
+    if price_id not in STRIPE_PRICE_MAP:
+        return Json.error("Could not find the price", 400)
+
+    price = STRIPE_PRICE_MAP[price_id]
+    if not price["stripe_price_id"]:
+        return Json.error("You don't need to pay for free plan", 400)
 
     user = session["user"]
     try:
         checkout_session = stripe.checkout.Session.create(
             success_url=url_for('bill.bill_success', _external=True),
             cancel_url=url_for('bill.bill_cancel', _external=True),
-            mode="payment", # todo: change to subscription for subscription
+            mode=price["stripe_price_mode"],
             client_reference_id=user["id"],
             customer_email=user["email"],
-            line_items=[{"price": price_id, "quantity": 1}],
+            line_items=[{"price": price["stripe_price_id"], "quantity": 1}],
             metadata={"price_id": price_id},
         )
         return Json.ok({"sessionId": checkout_session["id"]})
@@ -83,7 +89,7 @@ def webhook():
         # user_id = retrieved["client_reference_id"]
         # price_id = retrieved["line_items"]["data"][0]["price"]["id"]
 
-        if price_id not in STRIPE_PRICES:
+        if price_id not in STRIPE_PRICE_MAP:
             logging.error("Can not find the price for user_id: %s, price_id: %s", user_id, price_id)
             return Json.error("Can not find the price", 400)
 
