@@ -38,3 +38,12 @@ class UserDao:
     def get_user_by_id(user_id: int) -> User:
         with DbSession() as session:
             return session.query(User).filter(User.id == user_id).first()
+
+
+    @staticmethod
+    def expand_premium(user_id: int, days: int):
+        with DbSession() as session:
+            user = session.query(User).filter(User.id == user_id).first()
+            user.premium_expired_at = get_delta_days(days)
+            session.commit()
+            return user.id

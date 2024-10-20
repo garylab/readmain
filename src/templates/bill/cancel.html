@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pay Cancelled - {{sitename}}</title>
+
+  {% include 'common/head_meta.html' %}
+</head>
+<body class="{% if user_settings.darkMode == 'dark' %}bg-dark text-light{% endif %}"
+      style="font-size: {{ user_settings.fontSize }};">
+
+{% include 'common/navbar.html' %}
+
+<main>
+  <div class="container box">
+    <div class="row py-5">
+      <div class="pricing-header p-5 mx-auto text-center">
+        <h1 class="display-4 fw-bold mb-3">Payment cancelled.</h1>
+        <p class="fs-5 text-muted fw-light">
+          Your payment has been cancelled. Look forward to seeing you again.
+        </p>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% include 'common/footer.html' %}
+
+</body>
+</html>

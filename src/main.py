@@ -1,7 +1,8 @@
 from flask import Flask, request, session
 from werkzeug.middleware.proxy_fix import ProxyFix
+import stripe
 
-from src.constants.config import STATIC_VERSION, LOG_DIR, PROXY_NUM_BEFORE_APP
+from src.constants.config import STATIC_VERSION, LOG_DIR, PROXY_NUM_BEFORE_APP, STRIPE_SECRET_KEY
 from src.constants.languages import SUPPORTED_LANGUAGES
 from src.routes import home_route, auth_route, book_route, news_route, tool_route, bill_route
 from src.utils.date_utils import time_ago
@@ -17,6 +18,8 @@ if PROXY_NUM_BEFORE_APP > 0:
     app.wsgi_app = ProxyFix(
         app.wsgi_app, x_for=n, x_proto=n, x_host=n, x_prefix=n, x_port=n
     )
+
+stripe.api_key = STRIPE_SECRET_KEY
 
 app.register_blueprint(home_route.bp)
 app.register_blueprint(auth_route.bp)

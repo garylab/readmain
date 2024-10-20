@@ -309,3 +309,40 @@ function getFirstVisibleSentenceId() {
 
     return 1;
 }
+
+
+function initStripePayment(stripeInstance) {
+    var buyBtns = document.getElementsByClassName('buy');
+    for (var i = 0; i < buyBtns.length; i++) {
+        buyBtns[i].addEventListener("click", (e) => {
+            e.preventDefault();
+            var button = e.currentTarget;
+            button.disabled = true;
+
+            var data = {
+                price_id: e.currentTarget.getAttribute("data-price-id"),
+            }
+
+            fetch(CREATE_PAYMENT_URL, {
+                body: JSON.stringify(data),
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        alert('Failed to create payment, please try again');
+                        throw new Error('Failed to create payment session');
+                    }
+                    return response.json();
+                })
+                .then((json) => {
+                    return stripeInstance.redirectToCheckout({sessionId: json.data.sessionId})
+                })
+                .then((res) => {
+                    console.log(res);
+                }).finally(() => button.disabled = false);
+        });
+    }
+}
