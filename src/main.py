@@ -1,8 +1,10 @@
 from flask import Flask, request, session
+from flask_session import Session
 from werkzeug.middleware.proxy_fix import ProxyFix
 import stripe
+from flask_sqlalchemy import SQLAlchemy
 
-from src.constants.config import STATIC_VERSION, LOG_DIR, PROXY_NUM_BEFORE_APP, STRIPE_SECRET_KEY
+from src.constants.config import STATIC_VERSION, LOG_DIR, PROXY_NUM_BEFORE_APP, STRIPE_SECRET_KEY, DB_URL
 from src.constants.languages import SUPPORTED_LANGUAGES
 from src.routes import home_route, auth_route, book_route, news_route, tool_route, bill_route, user_route
 from src.utils.date_utils import time_ago, is_future
@@ -11,6 +13,15 @@ from src.utils.number_utils import short_number
 
 app = Flask(__name__)
 app.secret_key = 'JDYUF82opufd89sa!@8(u23o'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_URL
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['SESSION_TYPE'] = 'sqlalchemy'
+app.config['SESSION_SQLALCHEMY'] = SQLAlchemy(app)
+
+Session(app)
+
 init_logging(LOG_DIR.joinpath("web.log"))
 
 if PROXY_NUM_BEFORE_APP > 0:
@@ -32,6 +43,7 @@ app.register_blueprint(user_route.bp)
 app.jinja_env.filters['short_number'] = short_number
 app.jinja_env.filters['time_ago'] = time_ago
 app.jinja_env.filters['is_future'] = is_future
+
 
 @app.context_processor
 def inject_global_variables():

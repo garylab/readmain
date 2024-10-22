@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import session
+from flask import session, url_for, redirect
 
 from src.dao.user_dao import UserDao
 from src.utils.date_utils import is_future
@@ -46,3 +46,12 @@ def is_premium() -> bool:
 
     user = UserDao.get_by_id(session["user"]["id"])
     return is_future(user.premium_expired_at)
+
+
+def login_required(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        if is_logged_out():
+            return redirect(url_for("home.home"))
+        return func(*args, **kwargs)
+    return wrapper
