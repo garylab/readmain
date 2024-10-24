@@ -1,7 +1,7 @@
 <header class="sticky-top m-0 p-0">
   <nav class="navbar navbar-expand navbar-dark bg-dark">
     <div class="container box">
-      <a class="navbar-brand" href="/">{{ sitename }}</a>
+      <a class="navbar-brand d-none d-sm-block" href="/">{{ sitename }}</a>
 
       <div class="collapse navbar-collapse" id="main-navbar">
         <ul class="navbar-nav me-auto">
@@ -44,7 +44,7 @@
             <li class="nav-item">
               <a type="button" class="btn btn-outline-success btn-sm"
                  href="{{ url_for('auth.login') }}" id="login-btn" rel="nofollow"
-              >Login</a>
+              ><i class="bi bi-google"></i> Login</a>
             </li>
           {% endif %}
         </ul>
