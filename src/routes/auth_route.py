@@ -47,11 +47,8 @@ def callback():
 
     session['user'] = UserDao.get_or_add_user(userinfo)
 
-    next_uri = session.get("next", None)
-    if next_uri:
-        return redirect(next_uri)
-
-    return redirect('/')
+    next_uri = session.get("next", url_for('home.home'))
+    return redirect(next_uri)
 
 
 @bp.route('/logout')
