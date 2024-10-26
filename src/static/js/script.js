@@ -310,6 +310,26 @@ function getFirstVisibleSentenceId() {
     return 1;
 }
 
+function getLastVisibleSentenceId() {
+    // Get all <s> tags on the page
+    const sTags = document.querySelectorAll('s');
+
+    // Loop through the <s> tags in reverse order to find the last visible one
+    for (let i = sTags.length - 1; i >= 0; i--) {
+        const sTag = sTags[i];
+        const rect = sTag.getBoundingClientRect();
+
+        // Check if the element is in the visible window (partially or fully)
+        if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+            // Return the id of the last visible <s> tag
+            return sTag.id;
+        }
+    }
+
+    return null; // If no visible <s> tag is found
+}
+
+
 
 function initStripePayment(stripeInstance) {
     var buyBtns = document.getElementsByClassName('buy');
