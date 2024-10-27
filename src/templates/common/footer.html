@@ -7,6 +7,9 @@
     const PLAY_WORD_URL = '{{ url_for('tool.play_word', _external=True) }}';
     const PLAY_SENTENCE_URL = '{{ url_for('tool.play_sentence', _external=True) }}';
     const CREATE_PAYMENT_URL = '{{ url_for('bill.create_session', _external=True) }}';
+    const SAVE_READ_HISTORY_URL = '{{ url_for('user.save_read_history', _external=True) }}';
+
+    const LOGGED = {{ 'false' if user == None else 'true' }};
 
     var offcanvasTitleEl = document.getElementById('offcanvasTitle');
     var offcanvasEl = document.getElementById('offcanvasRoot');

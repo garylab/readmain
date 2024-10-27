@@ -39,25 +39,11 @@
         const articleEl = document.getElementById('article-content');
         const sourceType = articleEl.dataset.sourceType;
         const sourceId = articleEl.dataset.sourceId;
+        let lastSavedSentenceNo = {{ last_read_sentence_no }};
 
         initWordTranslation();
         initSentenceTranslation(sourceType, sourceId);
-
-        let lastSavedSentenceId = 1;
-        let scrollTimeout;
-        window.addEventListener('scroll', () => {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                const lastVisibleId = getLastVisibleSentenceId();
-                console.log("last visible: ", lastVisibleId);
-
-                if (lastVisibleId !== null && lastVisibleId > lastSavedSentenceId) {
-                    lastSavedSentenceId = lastVisibleId;
-                    console.log("save sid: ", lastVisibleId);
-                    saveReadingProgress(sourceType, sourceId, lastVisibleId);
-                }
-            }, 300);
-        });
+        initReadingHistory(sourceType, sourceId, lastSavedSentenceNo);
     });
 </script>
 </body>

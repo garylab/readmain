@@ -55,6 +55,14 @@ async function httpGet(baseUrl, params) {
     return await fetch(`${baseUrl}?${getQueryString(params)}`, {"method": "GET"});
 }
 
+async function httpPost(baseUrl, data) {
+    return await fetch(baseUrl, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(data),
+    });
+}
+
 async function translateSentence(button, sourceType, sourceId, sentenceNo, offcanvasContentEl, toLang) {
     button.innerText = 'Translating...';
     button.disabled = true;
@@ -266,13 +274,50 @@ function initLanguageSelection() {
     });
 }
 
-function saveReadingProgress(bookSlug, chapterNo, sentenceId) {
-    const readingProgress = {
-        chapterNo: chapterNo,
-        sentenceId: sentenceId,
-    };
-    localStorage.setItem(`bookReadingProgress_${bookSlug}`, JSON.stringify(readingProgress));
+async function initReadingHistory(sourceType, sourceId, lastSavedSentenceNo) {
+    let scrollTimeout;
+
+    window.addEventListener('scroll', () => {
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+            const lastVisibleSentenceNo = getLastVisibleSentenceId();
+            console.log("last visibale id: ", lastVisibleSentenceNo);
+
+            if (lastVisibleSentenceNo !== null && lastVisibleSentenceNo > lastSavedSentenceNo) {
+                lastSavedSentenceNo = lastVisibleSentenceNo;
+                saveReadingProgressToServer(sourceType, sourceId, lastVisibleSentenceNo);
+                console.log("last saved id: ", lastSavedSentenceNo);
+            }
+        }, 500);
+    });
 }
+
+async function saveReadingProgressToServer(sourceType, sourceId, sentenceNo) {
+    if (!LOGGED) {
+        console.log("User not logged in, skipped to save read progress.");
+        return;
+    }
+
+    try {
+        const response = await httpPost(SAVE_READ_HISTORY_URL, {
+            source_type: sourceType,
+            source_id: sourceId,
+            sentence_no: sentenceNo,
+        })
+
+        //const result = await response.json();
+        if (!response.ok) {
+            console.log("Save  failed.");
+            return;
+        }
+        console.log("Saved");
+
+    } catch (error) {
+        console.log("Save error failed.");
+    }
+}
+
+
 
 function getReadingProgress(bookSlug) {
     return localStorage.getItem(`bookReadingProgress_${bookSlug}`);
@@ -292,24 +337,6 @@ function loadReadingProgressToButton(buttonSelector) {
     });
 }
 
-function getFirstVisibleSentenceId() {
-    // Get all <s> tags on the page
-    const sTags = document.querySelectorAll('s');
-
-    // Loop through the <s> tags to find the first visible one
-    for (let sTag of sTags) {
-        const rect = sTag.getBoundingClientRect();
-
-        // Check if the element is in the visible window (partially or fully)
-        if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
-            // Return the id of the first visible <s> tag
-            return sTag.id;
-        }
-    }
-
-    return 1;
-}
-
 function getLastVisibleSentenceId() {
     // Get all <s> tags on the page
     const sTags = document.querySelectorAll('s');
@@ -322,11 +349,11 @@ function getLastVisibleSentenceId() {
         // Check if the element is in the visible window (partially or fully)
         if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
             // Return the id of the last visible <s> tag
-            return sTag.id;
+            return parseInt(sTag.innerText);
         }
     }
 
-    return null; // If no visible <s> tag is found
+    return null;
 }
 
 

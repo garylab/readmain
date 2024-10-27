@@ -173,5 +173,22 @@ class SentenceVocabulary(Base):
     )
 
 
+class ReadHistory(Base):
+    __tablename__ = 'read_histories'
+
+    id = Column(Integer, primary_key=True)
+    created_at = Column(DateTime, nullable=False, index=True, default=datetime.now)
+    updated_at = Column(DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
+
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
+    source_type = Column(Integer, nullable=False)
+    source_id = Column(Integer, nullable=False)
+    sentence_no = Column(Integer, nullable=False)
+
+    __table_args__ = (
+        UniqueConstraint('user_id', 'source_type', 'source_id', name='udx_userId_sourceType_sourceId'),
+    )
+
+
 if __name__ == '__main__':
     Base.metadata.create_all(DbEngine)
