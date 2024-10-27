@@ -32,9 +32,11 @@
         const articleEl = document.getElementById('article-content');
         const sourceType = articleEl.dataset.sourceType;
         const sourceId = articleEl.dataset.sourceId;
+        let lastSavedSentenceNo = {{ last_read_sentence_no }};
 
         initWordTranslation();
         initSentenceTranslation(sourceType, sourceId);
+        initReadingHistory(sourceType, sourceId, lastSavedSentenceNo);
     });
 </script>
 </body>
