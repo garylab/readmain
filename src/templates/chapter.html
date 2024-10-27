@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{{ chapter.title }} of {{ book.name }} Read Online Free - {{ sitename }}</title>
+    <title>Chapter {{ chapter.no }} of {{ book.name }} Read Online Free - {{ sitename }}</title>
     {% include 'common/head_meta.html' %}
 </head>
 <body class="{% if user_settings.darkMode == 'dark' %}bg-dark text-light{% endif %}" style="font-size: {{ user_settings.fontSize }};">
@@ -35,11 +35,6 @@
 
 {% include 'common/footer.html' %}
 <script>
-    // Track scroll position and save progress when the user scrolls or leaves the page
-    window.addEventListener('scroll', () => {
-        saveReadingProgress(bookSlug, chapterNo, getFirstVisibleSentenceId());
-    });
-
     document.addEventListener('DOMContentLoaded', function () {
         const articleEl = document.getElementById('article-content');
         const sourceType = articleEl.dataset.sourceType;
@@ -47,6 +42,22 @@
 
         initWordTranslation();
         initSentenceTranslation(sourceType, sourceId);
+
+        let lastSavedSentenceId = 1;
+        let scrollTimeout;
+        window.addEventListener('scroll', () => {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const lastVisibleId = getLastVisibleSentenceId();
+                console.log("last visible: ", lastVisibleId);
+
+                if (lastVisibleId !== null && lastVisibleId > lastSavedSentenceId) {
+                    lastSavedSentenceId = lastVisibleId;
+                    console.log("save sid: ", lastVisibleId);
+                    saveReadingProgress(sourceType, sourceId, lastVisibleId);
+                }
+            }, 300);
+        });
     });
 </script>
 </body>
