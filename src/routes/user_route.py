@@ -31,9 +31,10 @@ def save_read_history():
     json_data = request.get_json()
     source_type = json_data.get("source_type")
     source_id = json_data.get("source_id")
-    sentence_no = json_data.get("sentence_no")
+    top_sentence_no = json_data.get("top_sentence_no")
+    bottom_sentence_no = json_data.get("bottom_sentence_no")
 
-    ReadHistoryDao.add_or_update(user_id, source_type, source_id, sentence_no)
+    ReadHistoryDao.add_or_update(user_id, source_type, source_id, top_sentence_no, bottom_sentence_no)
     return Json.ok()
 
 

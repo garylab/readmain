@@ -24,9 +24,6 @@
             Words: {{ book.word_count|short_number }}
           </p>
           <p>{{ book.description }}</p>
-          <a class="btn btn-outline-secondary read-button"
-             data-book-slug="{{ book.slug }}"
-             href="{{ url_for('book.get_chapter', book_slug=book.slug, chapter_no=1) }}">Start Reading</a>
         </div>
       </div>
     </section>
@@ -34,20 +31,21 @@
     <section class="container box mb-5">
       <div class="d-flex justify-content-between small align-items-baseline">
         <h2 class="fs-4 text-start d-inline-block">Chapters</h2>
-        <span class="text-muted small">Vocabulary</span>
+        <span class="text-muted small">Read</span>
       </div>
+
       <ul class="list-group list-group-flush">
         {% for chapter in chapters %}
           <li class="list-group-item d-flex justify-content-between align-items-baseline px-0">
-            <a href="{{ url_for('book.get_chapter', book_slug=book.slug, chapter_no=chapter.no) }}">Chapter {{ chapter.no }}</a>
+            <a href="{{ url_for('book.get_chapter', book_slug=book.slug, chapter_no=chapter.no) }}{% if read_sentences[chapter.id].top > 0 %}#{{ read_sentences[chapter.id].top }}{% endif %}">Chapter {{ chapter.no }}</a>
 
             <div class="progress w-25" role="progressbar" aria-label="Info example"
                  style="height: 0.85rem"
-                 aria-valuenow="{{ 30 }}"
+                 aria-valuenow="{{ read_sentences[chapter.id].bottom }}"
                  aria-valuemin="0"
-                 aria-valuemax="{{ 31 }}">
-              <div class="progress-bar bg-secondary" style="width: {{ 30 * 100 // 30 }}%">
-          4 / 30
+                 aria-valuemax="{{ chapter.sentence_count }}">
+              <div class="progress-bar bg-secondary" style="width: {{ read_sentences[chapter.id].bottom * 100 // chapter.sentence_count }}%">
+                {{ read_sentences[chapter.id].bottom * 100 // chapter.sentence_count }}%
               </div>
             </div>
 

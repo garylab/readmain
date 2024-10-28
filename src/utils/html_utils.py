@@ -51,7 +51,7 @@ def _process_tag(tag, sentence_no, parsed) -> int:
         parsed.word_count += word_count
         parsed.sentence_count += 1
 
-        tagged_sentences.append(f'<span><s>{sentence_no}</s><b>{wrapped}</b></span>')
+        tagged_sentences.append(f'<span><s id="{sentence_no}">{sentence_no}</s><b>{wrapped}</b></span>')
 
     tag.clear()
     tag.append(BeautifulSoup(' '.join(tagged_sentences), 'html.parser'))

@@ -183,7 +183,8 @@ class ReadHistory(Base):
     user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     source_type = Column(Integer, nullable=False)
     source_id = Column(Integer, nullable=False)
-    sentence_no = Column(Integer, nullable=False)
+    top_sentence_no = Column(Integer, nullable=False)
+    bottom_sentence_no = Column(Integer, nullable=False)
 
     __table_args__ = (
         UniqueConstraint('user_id', 'source_type', 'source_id', name='udx_userId_sourceType_sourceId'),

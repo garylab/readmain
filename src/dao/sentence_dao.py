@@ -1,5 +1,5 @@
 from src.db.engine import DbSession
-from src.db.entity import Sentence, SentenceVocabulary, SentenceTranslation, SentenceAudio
+from src.db.entity import Sentence, SentenceVocabulary, SentenceTranslation, SentenceAudio, ReadHistory
 from src.utils.hash_utils import int_hash
 
 

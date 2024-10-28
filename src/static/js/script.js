@@ -280,19 +280,20 @@ async function initReadingHistory(sourceType, sourceId, lastSavedSentenceNo) {
     window.addEventListener('scroll', () => {
         clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
-            const lastVisibleSentenceNo = getLastVisibleSentenceId();
-            console.log("last visibale id: ", lastVisibleSentenceNo);
+            const topSid = getFirstVisibleSentenceId();
+            const bottomSid = getLastVisibleSentenceId();
+            console.log("bottom visible id: ", bottomSid);
 
-            if (lastVisibleSentenceNo !== null && lastVisibleSentenceNo > lastSavedSentenceNo) {
-                lastSavedSentenceNo = lastVisibleSentenceNo;
-                saveReadingProgressToServer(sourceType, sourceId, lastVisibleSentenceNo);
+            if (bottomSid !== null && bottomSid > lastSavedSentenceNo) {
+                lastSavedSentenceNo = bottomSid;
+                saveReadingProgressToServer(sourceType, sourceId, topSid, bottomSid);
                 console.log("last saved id: ", lastSavedSentenceNo);
             }
         }, 500);
     });
 }
 
-async function saveReadingProgressToServer(sourceType, sourceId, sentenceNo) {
+async function saveReadingProgressToServer(sourceType, sourceId, topSid, bottomSid) {
     if (!LOGGED) {
         console.log("User not logged in, skipped to save read progress.");
         return;
@@ -302,7 +303,8 @@ async function saveReadingProgressToServer(sourceType, sourceId, sentenceNo) {
         const response = await httpPost(SAVE_READ_HISTORY_URL, {
             source_type: sourceType,
             source_id: sourceId,
-            sentence_no: sentenceNo,
+            top_sentence_no: topSid,
+            bottom_sentence_no: bottomSid,
         })
 
         //const result = await response.json();
@@ -318,23 +320,18 @@ async function saveReadingProgressToServer(sourceType, sourceId, sentenceNo) {
 }
 
 
+function getFirstVisibleSentenceId() {
+    const sTags = document.querySelectorAll('s');
+    for (let sTag of sTags) {
+        const rect = sTag.getBoundingClientRect();
 
-function getReadingProgress(bookSlug) {
-    return localStorage.getItem(`bookReadingProgress_${bookSlug}`);
-}
-
-function loadReadingProgressToButton(buttonSelector) {
-    var readButtonEls = document.querySelectorAll(buttonSelector);
-    Array.from(readButtonEls).forEach(buttonEl => {
-        const bookSlug = buttonEl.dataset.bookSlug;
-        const storedProgress = getReadingProgress(bookSlug);
-
-        if (storedProgress) {
-            const {chapterNo, sentenceId} = JSON.parse(storedProgress);
-            buttonEl.href = `/${bookSlug}/${chapterNo}.html#${sentenceId}`;
-            buttonEl.innerText = `Continue Reading`;
+        // Check if the element is at least partially visible in the viewport
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            return sTag.id;
         }
-    });
+    }
+
+    return null;
 }
 
 function getLastVisibleSentenceId() {
@@ -349,14 +346,12 @@ function getLastVisibleSentenceId() {
         // Check if the element is in the visible window (partially or fully)
         if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
             // Return the id of the last visible <s> tag
-            return parseInt(sTag.innerText);
+            return parseInt(sTag.id);
         }
     }
 
     return null;
 }
-
-
 
 function initStripePayment(stripeInstance) {
     var buyBtns = document.getElementsByClassName('buy');
