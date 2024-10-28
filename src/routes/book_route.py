@@ -6,6 +6,7 @@ from src.dao.chapter_dao import ChapterDao
 from src.dao.read_history_dao import ReadHistoryDao
 from src.db.entity import ReadHistory
 from src.dto.read_progress_dto import ReadProgress
+from src.services.read_history_service import get_reads, get_last_read_sentence_no
 from src.utils.auth_utils import is_logged_in
 from src.utils.book_utils import get_prev_next_chapter_urls
 
@@ -29,15 +30,7 @@ def get_book(book_slug: str):
     book = BookDao.get_by_slug(book_slug)
     chapters = ChapterDao.get_all(book.id)
 
-    read_sentences = {c.id: ReadProgress(top=0, bottom=0) for c in chapters}
-    if is_logged_in():
-        chapter_ids = [c.id for c in chapters]
-        user_id = session["user"]["id"]
-        read_histories = ReadHistoryDao.get_all_by_source_ids(user_id, SentenceSource.CHAPTER.value,  chapter_ids)
-        for history in read_histories:
-            read_sentences[history.source_id].top = history.top_sentence_no
-            read_sentences[history.source_id].bottom = history.bottom_sentence_no
-
+    read_sentences = get_reads(SentenceSource.CHAPTER, [chapter.id for chapter in chapters])
     return render_template('book.html',
                            book=book,
                            read_sentences=read_sentences,
@@ -49,10 +42,7 @@ def get_chapter(book_slug: str, chapter_no: str):
     book = BookDao.get_by_slug(book_slug)
     chapter = ChapterDao.get_one(book.id, int(chapter_no))
 
-    bottom_sentence_no = 0
-    if is_logged_in():
-        history = ReadHistoryDao.get_one(session["user"]["id"], SentenceSource.CHAPTER.value, chapter.id)
-        bottom_sentence_no = history.bottom_sentence_no if history else 0
+    bottom_sentence_no = get_last_read_sentence_no(SentenceSource.CHAPTER, chapter.id)
 
     prev_chapter_url, next_chapter_url = get_prev_next_chapter_urls(book, int(chapter_no))
     return render_template('chapter.html',
