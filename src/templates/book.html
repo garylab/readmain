@@ -37,18 +37,23 @@
       <ul class="list-group list-group-flush">
         {% for chapter in chapters %}
           <li class="list-group-item d-flex justify-content-between align-items-baseline px-0">
-            <a href="{{ url_for('book.get_chapter', book_slug=book.slug, chapter_no=chapter.no) }}{% if read_sentences[chapter.id].top > 0 %}#{{ read_sentences[chapter.id].top }}{% endif %}">Chapter {{ chapter.no }}</a>
+            <a href="{{ url_for('book.get_chapter', book_slug=book.slug, chapter_no=chapter.no) }}">Chapter {{ chapter.no }}</a>
 
-            <div class="progress w-25" role="progressbar" aria-label="Info example"
-                 style="height: 0.85rem"
-                 aria-valuenow="{{ read_sentences[chapter.id].bottom }}"
-                 aria-valuemin="0"
-                 aria-valuemax="{{ chapter.sentence_count }}">
-              <div class="progress-bar bg-secondary" style="width: {{ read_sentences[chapter.id].bottom * 100 // chapter.sentence_count }}%">
-                {{ read_sentences[chapter.id].bottom * 100 // chapter.sentence_count }}%
+            <a href="{{ url_for('book.get_chapter', book_slug=book.slug, chapter_no=chapter.no) }}{% if read_sentences[chapter.id].top > 0 %}#{{ read_sentences[chapter.id].top }}{% endif %}" class="w-25">
+              <div class="progress" role="progressbar" aria-label="Info example"
+                   style="height: 0.85rem"
+                   aria-valuenow="{{ read_sentences[chapter.id].bottom }}"
+                   aria-valuemin="0"
+                   aria-valuemax="{{ chapter.sentence_count }}">
+
+                <div class="progress-bar bg-secondary" style="width: {{ read_sentences[chapter.id].bottom * 100 // chapter.sentence_count }}%">
+
+                  {{ read_sentences[chapter.id].bottom * 100 // chapter.sentence_count }}%
+
+                </div>
+
               </div>
-            </div>
-
+            </a>
           </li>
         {% endfor %}
       </ul>
