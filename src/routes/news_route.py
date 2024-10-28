@@ -3,6 +3,7 @@ from flask import Blueprint, render_template, request, session
 from src.constants.enums import SentenceSource
 from src.dao.news_dao import NewsDao
 from src.dao.read_history_dao import ReadHistoryDao
+from src.services.read_history_service import get_last_read_sentence_no, get_reads
 from src.utils.auth_utils import is_logged_in
 
 bp = Blueprint('news', __name__)
@@ -17,10 +18,12 @@ def inject_global_variables():
 def get_all_news():
     page = request.args.get('page', 1, int)
     all_news = NewsDao.get_all_news(page, size=10)
+    read_sentences = get_reads(SentenceSource.NEWS, [news.id for news in all_news])
     return render_template('news-home.html',
                            all_news=all_news,
                            page=page,
-                           news_count=len(all_news)
+                           news_count=len(all_news),
+                           read_sentences=read_sentences
                            )
 
 
@@ -30,10 +33,6 @@ def get_news(id: int):
     if not news:
         return "News not found", 404
 
-    last_read_sentence_no = 0
-    if is_logged_in():
-        history = ReadHistoryDao.get_one(session["user"]["id"], SentenceSource.NEWS.value, news.id)
-        last_read_sentence_no = history.sentence_no if history else 0
-
-    return render_template('news.html', news=news, last_read_sentence_no=last_read_sentence_no)
+    bottom_sentence_no = get_last_read_sentence_no(SentenceSource.NEWS, news.id)
+    return render_template('news.html', news=news, last_read_sentence_no=bottom_sentence_no)
 

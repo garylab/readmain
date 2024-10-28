@@ -26,7 +26,7 @@
     color: var(--bs-light-rgb) !important;
 }
 
-.box {max-width: 720px;}
+.box {max-width: 800px;}
 .medium-box {max-width: 920px;}
 h1 {text-align: center; margin: 1rem 0;}
 a {text-decoration: none;}

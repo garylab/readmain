@@ -14,14 +14,43 @@
 <main>
     <section class="container box my-5">
         <h1 class="fs-5 text-start">All news</h1>
-        <ol>
+
+        <table class="table table-borderless">
+          <thead>
+          <tr>
+            <th scope="col">News</th>
+            <th scope="col">Time</th>
+            <th scope="col">Read</th>
+          </tr>
+          </thead>
+          <tbody>
             {%  for n in all_news %}
-                <li class="my-2">
-                    <a href="{{ url_for('news.get_news', id=n.id) }}">{{ n.title }}</a>
-                    <span class="small text-muted fw-light"> - {{ n.publication }}, {{ n.date|time_ago }}</span>
-                </li>
+              <tr>
+                <td>
+                  <a href="{{ url_for('news.get_news', id=n.id) }}">{{ n.title }}</a>
+                </td>
+                <td class="small text-muted fw-light">{{ n.date|time_ago }}</td>
+                <td>
+                  <a href="{{ url_for('news.get_news', id=n.id) }}{% if read_sentences[n.id].top > 0 %}#{{ read_sentences[n.id].top }}{% endif %}" class="w-25">
+                    <div class="progress" role="progressbar" aria-label="Info example"
+                         style="height: 0.85rem"
+                         aria-valuenow="{{ read_sentences[n.id].bottom }}"
+                         aria-valuemin="0"
+                         aria-valuemax="{{ n.sentence_count }}">
+
+                      <div class="progress-bar bg-secondary" style="width: {{ read_sentences[n.id].bottom * 100 // n.sentence_count }}%">
+
+                        {{ read_sentences[n.id].bottom * 100 // n.sentence_count }}%
+
+                      </div>
+
+                    </div>
+                  </a>
+                </td>
+              </tr>
             {% endfor %}
-        </ol>
+          </tbody>
+        </table>
     </section>
 
     <section class="container box my-5">
