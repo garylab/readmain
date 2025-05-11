@@ -2,18 +2,22 @@ from lxml import etree
 import requests
 from bs4 import BeautifulSoup, Comment
 
-from src.constants.config import SERPAPI_KEY
+from src.constants.config import KEY_POOL_API_KEY
 
 headers = {
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
     "referer": "https://news.google.com/",
 }
 
+def get_api_key() -> str:
+    return requests.get("https://key.garymeng.com/get/serpapi", headers={"X-Api-Key": KEY_POOL_API_KEY}).text
+
 
 def get_google_news():
     url = "https://serpapi.com/search"
+    api_key = get_api_key()
     params = {
-        "api_key": SERPAPI_KEY,
+        "api_key": api_key,
         "engine": "google_news",
         "gl": "us",
         "hl": "en",
