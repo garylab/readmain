@@ -2,5 +2,5 @@ export ROOT_DIR="$(dirname $0)"
 echo "You are in dir: $ROOT_DIR"
 
 (cd $ROOT_DIR \
-  && docker build --tag english-web . \
-  && docker run --rm --env-file local.env english-web python /workspace/src/crawl_news.py)
+  && docker build --tag readmain . \
+  && docker run --rm --env-file local.env readmain python /workspace/src/crawl_news.py)

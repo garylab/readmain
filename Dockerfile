@@ -10,6 +10,6 @@ RUN python -m pip install --upgrade pip
 RUN pip install --no-cache-dir --upgrade -r requirements.txt
 RUN python -m spacy download en_core_web_sm
 
-COPY src .
+COPY src src/
 
 CMD ["gunicorn", "src.main:app", "--bind", "0.0.0.0:8000", "--access-logfile", "-", "-k", "gevent", "--worker-connections=100"]
