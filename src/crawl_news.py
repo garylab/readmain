@@ -18,6 +18,10 @@ publications = {
     "BBC.com": {
         "name": "BBC",
         "html_parser": parse_bbc,
+    },
+    "BBC": {
+        "name": "BBC",
+        "html_parser": parse_bbc,
     }
 }
 
